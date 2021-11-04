@@ -8,6 +8,8 @@ defmodule Conduit.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Start the Conduit app
+      Conduit.App,
       # Start the Ecto repository
       Conduit.Repo,
       # Start the Telemetry supervisor
