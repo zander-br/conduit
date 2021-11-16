@@ -16,8 +16,6 @@ defmodule Conduit.DataCase do
 
   use ExUnit.CaseTemplate
 
-  alias Conduit.Repo
-  alias Ecto.Adapters.SQL.Sandbox
   alias Ecto.Changeset
 
   using do
@@ -32,9 +30,9 @@ defmodule Conduit.DataCase do
     end
   end
 
-  setup tags do
-    pid = Sandbox.start_owner!(Repo, shared: not tags[:async])
-    on_exit(fn -> Sandbox.stop_owner(pid) end)
+  setup do
+    Conduit.Storage.reset!()
+
     :ok
   end
 

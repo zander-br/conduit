@@ -13,13 +13,11 @@ config :conduit, Conduit.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
-config :conduit, Conduit.EventStore,
-  serializer: Commanded.Serialization.JsonSerializer,
-  username: "postgres",
-  password: "postgres",
-  database: "conduit_eventstore_test",
-  hostname: "localhost",
-  pool_size: 10
+config :conduit, Conduit.App,
+  event_store: [
+    adapter: Commanded.EventStore.Adapters.InMemory,
+    serializer: Commanded.Serialization.JsonSerializer
+  ]
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
