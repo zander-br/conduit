@@ -2,7 +2,8 @@ defmodule Conduit.Accounts.Projectors.User do
   use Commanded.Projections.Ecto,
     application: Conduit.App,
     repo: Conduit.Repo,
-    name: "Accounts.Projectors.User"
+    name: "Accounts.Projectors.User",
+    consistency: :strong
 
   alias Conduit.Accounts.Events.UserRegistered
   alias Conduit.Accounts.Projections.User
@@ -10,7 +11,7 @@ defmodule Conduit.Accounts.Projectors.User do
 
   project(%UserRegistered{} = registered, fn multi ->
     Multi.insert(multi, :user, %User{
-      uuid: registered.user_uuid,
+      id: registered.user_uuid,
       username: registered.username,
       email: registered.email,
       hashed_password: registered.hashed_password,
