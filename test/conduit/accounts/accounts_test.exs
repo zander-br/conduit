@@ -17,11 +17,19 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integration
-    test "should faild with invalid data and return error" do
+    test "should fail with invalid data and return error" do
       assert {:error, :validation_failure, errors} =
                Accounts.register_user(build(:user, username: ""))
 
       assert errors == %{username: ["can't be empty"]}
+    end
+
+    @tag :integration
+    test "should fail when username already taken and return error" do
+      assert {:ok, %User{}} = Accounts.register_user(build(:user))
+      assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user))
+
+      assert errors == %{username: ["has already been taken"]}
     end
   end
 end
