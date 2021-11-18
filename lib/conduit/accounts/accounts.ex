@@ -5,6 +5,7 @@ defmodule Conduit.Accounts do
 
   alias Conduit.Accounts.Commands.RegisterUser
   alias Conduit.Accounts.Projections.User
+  alias Conduit.Accounts.Queries.UserByUsername
   alias Conduit.App, as: ConduitApp
   alias Conduit.Repo
   alias Conduit.Router
@@ -25,6 +26,16 @@ defmodule Conduit.Accounts do
     else
       reply -> reply
     end
+  end
+
+  @doc """
+  Get an existing user by their username, or return `nil` if not registered
+  """
+  def user_by_username(username) do
+    username
+    |> String.downcase()
+    |> UserByUsername.new()
+    |> Repo.one()
   end
 
   defp get(schema, uuid) do
