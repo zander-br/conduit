@@ -35,7 +35,12 @@ config :conduit, Conduit.App,
   pubsub: :local,
   registry: :local
 
-config :vex, sources: [Conduit.Support.Validators, Vex.Validators]
+config :vex,
+  sources: [
+    Conduit.Accounts.Validators,
+    Conduit.Support.Validators,
+    Vex.Validators
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
