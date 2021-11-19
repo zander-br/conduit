@@ -1,10 +1,11 @@
 defmodule Conduit.Accounts.Commands.RegisterUser do
-  defstruct [:user_uuid, :username, :email, :hashed_password]
+  defstruct [:user_uuid, :username, :email, :password, :hashed_password]
 
   use ExConstructor
   use Vex.Struct
 
   alias Conduit.Accounts.Commands.RegisterUser
+  alias Conduit.Auth
 
   validates(:user_uuid, uuid: true)
 
@@ -43,6 +44,13 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
   """
   def downcase_email(%RegisterUser{email: email} = register_user) do
     %RegisterUser{register_user | email: String.downcase(email)}
+  end
+
+  @doc """
+  Hash the password, clear the origin password
+  """
+  def hash_password(%RegisterUser{password: password} = register_user) do
+    %RegisterUser{register_user | password: nil, hashed_password: Auth.hash_password(password)}
   end
 
   defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields,
