@@ -15,7 +15,13 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
     unique_username: true
   )
 
-  validates(:email, presence: [message: "can't be empty"], string: true)
+  validates(:email,
+    presence: [message: "can't be empty"],
+    format: [with: ~r/\S+@\S+\.\S+/, allow_nil: true, allow_blank: true, message: "is invalid"],
+    string: true,
+    unique_email: true
+  )
+
   validates(:hashed_password, presence: [message: "can't be empty"], string: true)
 
   @doc """
@@ -32,10 +38,20 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
     %RegisterUser{register_user | username: String.downcase(username)}
   end
 
+  @doc """
+  Convert email to lowercase characters
+  """
+  def downcase_email(%RegisterUser{email: email} = register_user) do
+    %RegisterUser{register_user | email: String.downcase(email)}
+  end
+
   defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields,
     for: Conduit.Accounts.Commands.RegisterUser do
     def unique(_command) do
-      [{:username, "has already been taken"}]
+      [
+        {:email, "has already been taken"},
+        {:username, "has already been taken"}
+      ]
     end
   end
 end

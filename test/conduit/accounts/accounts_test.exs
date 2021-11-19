@@ -26,8 +26,10 @@ defmodule Conduit.AccountsTest do
 
     @tag :integration
     test "should fail when username already taken and return error" do
-      assert {:ok, %User{}} = Accounts.register_user(build(:user))
-      assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user))
+      assert {:ok, %User{}} = Accounts.register_user(build(:user, email: "jake@jake.jake"))
+
+      assert {:error, :validation_failure, errors} =
+               Accounts.register_user(build(:user, email: "jake2@jake.jake"))
 
       assert errors == %{username: ["has already been taken"]}
     end
@@ -52,6 +54,40 @@ defmodule Conduit.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.register_user(build(:user, username: "JAKE"))
 
       assert user.username == "jake"
+    end
+
+    @tag :integration
+    test "should fail when email address already taken and return error" do
+      assert {:ok, %User{}} = Accounts.register_user(build(:user, username: "jake"))
+
+      assert {:error, :validation_failure, errors} =
+               Accounts.register_user(build(:user, username: "jake2"))
+
+      assert errors == %{email: ["has already been taken"]}
+    end
+
+    @tag :integration
+    test "should fail when registering identical email addresses at same time and return error" do
+      1..2
+      |> Enum.map(fn x ->
+        Task.async(fn -> Accounts.register_user(build(:user, username: "user#{x}")) end)
+      end)
+      |> Enum.map(&Task.await/1)
+    end
+
+    @tag :integration
+    test "should fail when email address format is invalid and return error" do
+      assert {:error, :validation_failure, erros} =
+               Accounts.register_user(build(:user, email: "invalid_email"))
+
+      assert erros == %{email: ["is invalid"]}
+    end
+
+    @tag :integration
+    test "should convert email address to lowercase" do
+      assert {:ok, %User{} = user} = Accounts.register_user(build(:user, email: "JAKE@JAKE.JAKE"))
+
+      assert user.email == "jake@jake.jake"
     end
   end
 end
