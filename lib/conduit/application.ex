@@ -19,7 +19,9 @@ defmodule Conduit.Application do
       # Start the Endpoint (http/https)
       ConduitWeb.Endpoint,
       # Accounts supervisor
-      Conduit.Accounts.Supervisor
+      Conduit.Accounts.Supervisor,
+      # Enforce unique constraints
+      Conduit.Support.Unique
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
