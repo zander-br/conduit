@@ -18,8 +18,9 @@ defmodule Conduit.Accounts do
 
     register_user =
       attrs
-      |> assign(:user_uuid, uuid)
       |> RegisterUser.new()
+      |> RegisterUser.assign_uuid(uuid)
+      |> RegisterUser.downcase_username()
 
     with :ok <- Router.dispatch(register_user, application: ConduitApp, consistency: :strong) do
       get(User, uuid)
@@ -44,6 +45,4 @@ defmodule Conduit.Accounts do
       projection -> {:ok, projection}
     end
   end
-
-  defp assign(attrs, key, value), do: Map.put(attrs, key, value)
 end
