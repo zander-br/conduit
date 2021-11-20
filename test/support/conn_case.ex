@@ -17,7 +17,7 @@ defmodule ConduitWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
-  alias Ecto.Adapters.SQL.Sandbox
+  alias Phoenix.ConnTest
 
   using do
     quote do
@@ -25,6 +25,8 @@ defmodule ConduitWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ConduitWeb.ConnCase
+      import Conduit.Factory
+      import Conduit.Fixture
 
       alias ConduitWeb.Router.Helpers, as: Routes
 
@@ -33,9 +35,9 @@ defmodule ConduitWeb.ConnCase do
     end
   end
 
-  setup tags do
-    pid = Sandbox.start_owner!(Conduit.Repo, shared: not tags[:async])
-    on_exit(fn -> Sandbox.stop_owner(pid) end)
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+  setup _tags do
+    Conduit.Storage.reset!()
+
+    {:ok, conn: ConnTest.build_conn()}
   end
 end

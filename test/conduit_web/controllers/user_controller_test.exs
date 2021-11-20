@@ -1,14 +1,6 @@
 defmodule ConduitWeb.UserControllerTest do
   use ConduitWeb.ConnCase
 
-  import Conduit.Factory
-
-  alias Conduit.Accounts
-
-  def fixture(:user, attrs \\ []) do
-    build(:user, attrs) |> Accounts.create_user()
-  end
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -45,7 +37,7 @@ defmodule ConduitWeb.UserControllerTest do
       conn =
         post(conn, Routes.user_path(conn, :create), user: build(:user, email: "jake2@jake.jake"))
 
-      assert json_response(conn, 422)["erros"] == %{
+      assert json_response(conn, 422)["errors"] == %{
                "username" => [
                  "has already been taken"
                ]
