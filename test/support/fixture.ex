@@ -6,4 +6,10 @@ defmodule Conduit.Fixture do
   def fixture(:user, attrs \\ []) do
     build(:user, attrs) |> Accounts.register_user()
   end
+
+  def register_user(_context) do
+    {:ok, user} = fixture(:user)
+
+    [user: user]
+  end
 end
