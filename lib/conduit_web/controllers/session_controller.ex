@@ -8,13 +8,13 @@ defmodule ConduitWeb.SessionController do
   action_fallback ConduitWeb.FallbackController
 
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    case Auth.authenticate(email, password) do
-      {:ok, %User{} = user} ->
-        conn
-        |> put_status(:created)
-        |> put_view(UserView)
-        |> render("show.json", user: user)
-
+    with {:ok, %User{} = user} <- Auth.authenticate(email, password),
+         {:ok, jwt} <- generate_jwt(user) do
+      conn
+      |> put_status(:created)
+      |> put_view(UserView)
+      |> render("show.json", user: user, jwt: jwt)
+    else
       {:error, :unauthenticated} ->
         conn
         |> put_status(:unprocessable_entity)
