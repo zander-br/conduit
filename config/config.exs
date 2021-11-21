@@ -43,8 +43,12 @@ config :vex,
   ]
 
 config :conduit, Conduit.Auth.Guardian,
-  issuer: "Conduit",
+  issuer: "conduit",
   secret_key: "EszmO13wnzRjjPx874OLMNbZ1B8J7uA/2YZX8ntMDJcCGKG8fbJRRcrDzXkRYD53"
+
+config :conduit, ConduitWeb.Auth.Pipeline,
+  module: Conduit.Auth.Guardian,
+  error_handler: ConduitWeb.Auth.ErrorHandler
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

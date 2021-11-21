@@ -1,4 +1,4 @@
-defmodule ConduitWeb.ErrorHandler do
+defmodule ConduitWeb.Auth.ErrorHandler do
   import Plug.Conn
 
   @behaviour Guardian.Plug.ErrorHandler

@@ -6,12 +6,13 @@ defmodule ConduitWeb.Router do
   end
 
   pipeline :auth do
-    plug Guardian.Plug.Pipeline,
-      error_handler: ConduitWeb.ErrorHandler,
-      module: Conduit.Auth.Guardian
+    plug ConduitWeb.Auth.Pipeline
+  end
 
-    plug Guardian.Plug.VerifyHeader, scheme: "Token"
-    plug Guardian.Plug.LoadResource
+  scope "/api", ConduitWeb do
+    pipe_through [:api, :auth]
+
+    get "/users", UserController, :current
   end
 
   scope "/api", ConduitWeb do

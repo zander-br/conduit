@@ -25,6 +25,7 @@ defmodule ConduitWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ConduitWeb.ConnCase
+      import ConduitWeb.ConnHelpers
       import Conduit.Factory
       import Conduit.Fixture
 
