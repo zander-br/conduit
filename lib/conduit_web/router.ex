@@ -12,7 +12,7 @@ defmodule ConduitWeb.Router do
   scope "/api", ConduitWeb do
     pipe_through [:api, :auth]
 
-    get "/users", UserController, :current
+    get "/user", UserController, :current
   end
 
   scope "/api", ConduitWeb do
