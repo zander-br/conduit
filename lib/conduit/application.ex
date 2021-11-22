@@ -20,6 +20,8 @@ defmodule Conduit.Application do
       ConduitWeb.Endpoint,
       # Accounts supervisor
       Conduit.Accounts.Supervisor,
+      # Blog supervisor
+      Conduit.Blog.Supervisor,
       # Enforce unique constraints
       Conduit.Support.Unique
     ]
