@@ -38,6 +38,7 @@ config :conduit, Conduit.App,
 config :vex,
   sources: [
     Conduit.Accounts.Validators,
+    Conduit.Blog.Validators,
     Conduit.Support.Validators,
     Vex.Validators
   ]

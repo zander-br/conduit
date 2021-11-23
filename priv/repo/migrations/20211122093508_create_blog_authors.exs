@@ -3,8 +3,8 @@ defmodule Conduit.Repo.Migrations.CreateBlogAuthors do
 
   def change do
     create table(:blog_authors, primary_key: false) do
-      add :id, :binary_id, primary_key: true
-      add :user_uuid, :binary_id
+      add :id, :uuid, primary_key: true
+      add :user_id, :uuid
       add :username, :string
       add :bio, :string
       add :image, :string
@@ -12,6 +12,6 @@ defmodule Conduit.Repo.Migrations.CreateBlogAuthors do
       timestamps()
     end
 
-    create unique_index(:blog_authors, [:user_uuid])
+    create unique_index(:blog_authors, [:user_id])
   end
 end

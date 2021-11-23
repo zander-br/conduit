@@ -3,7 +3,7 @@ defmodule Conduit.Repo.Migrations.CreateAccountsUsers do
 
   def change do
     create table(:accounts_users, primary_key: false) do
-      add :id, :binary_id, primary_key: true
+      add :id, :uuid, primary_key: true
       add :username, :string
       add :email, :string
       add :hashed_password, :string

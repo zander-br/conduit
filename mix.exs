@@ -49,6 +49,7 @@ defmodule Conduit.MixProject do
       {:vex, "~> 0.9.0"},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
+      {:slugger, "~> 0.3.0"},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}

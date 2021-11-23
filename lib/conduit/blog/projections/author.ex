@@ -7,7 +7,7 @@ defmodule Conduit.Blog.Projections.Author do
     field :username, :string
     field :bio, :string
     field :image, :string
-    field :user_uuid, :binary_id
+    field :user_id, :binary_id
 
     timestamps()
   end

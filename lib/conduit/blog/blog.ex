@@ -6,9 +6,25 @@ defmodule Conduit.Blog do
   import Ecto.Query, warn: false
 
   alias Conduit.App, as: ConduitApp
-  alias Conduit.Blog.Commands.CreateAuthor
-  alias Conduit.Blog.Projections.Author
+  alias Conduit.Blog.Commands.{CreateAuthor, PublishArticle}
+  alias Conduit.Blog.Projections.{Article, Author}
+  alias Conduit.Blog.Queries.ArticleBySlug
   alias Conduit.{Repo, Router}
+
+  @doc """
+  Get the author for a given uuid, or raise an `Ecto.NoResultsError` if not found.
+  """
+  def get_author!(uuid), do: Repo.get!(Author, uuid)
+
+  @doc """
+  Get an article by its URL slug, or return `nil` if not found.
+  """
+  def article_by_slug(slug) do
+    slug
+    |> String.downcase()
+    |> ArticleBySlug.new()
+    |> Repo.one()
+  end
 
   @doc """
   Create an author.
@@ -22,6 +38,26 @@ defmodule Conduit.Blog do
 
     with :ok <- Router.dispatch(create_author, application: ConduitApp, consistency: :strong) do
       get(Author, uuid)
+    else
+      reply -> reply
+    end
+  end
+
+  @doc """
+  Publishes an article by the given author.
+  """
+  def publish_article(%Author{} = author, attrs \\ %{}) do
+    uuid = UUID.uuid4()
+
+    publish_article =
+      attrs
+      |> PublishArticle.new()
+      |> PublishArticle.assign_uuid(uuid)
+      |> PublishArticle.assign_author(author)
+      |> PublishArticle.generate_url_slug()
+
+    with :ok <- Router.dispatch(publish_article, application: ConduitApp, consistency: :strong) do
+      get(Article, uuid)
     else
       reply -> reply
     end

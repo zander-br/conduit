@@ -27,6 +27,7 @@ defmodule Conduit.DataCase do
       import Ecto.Query
       import Conduit.DataCase
       import Conduit.Factory
+      import Conduit.Fixture
     end
   end
 
