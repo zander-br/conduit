@@ -11,7 +11,7 @@ defmodule Conduit.Fixture do
   end
 
   def create_author(_context) do
-    {:ok, author} = fixture(:author, user_uuid: UUID.uuid4())
+    {:ok, author} = fixture(:author, user_id: UUID.uuid4())
 
     [author: author]
   end

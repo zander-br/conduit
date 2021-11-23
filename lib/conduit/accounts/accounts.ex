@@ -14,18 +14,18 @@ defmodule Conduit.Accounts do
   Register a new user.
   """
   def register_user(attrs \\ %{}) do
-    uuid = UUID.uuid4()
+    id = UUID.uuid4()
 
     register_user =
       attrs
       |> RegisterUser.new()
-      |> RegisterUser.assign_uuid(uuid)
+      |> RegisterUser.assign_id(id)
       |> RegisterUser.downcase_username()
       |> RegisterUser.downcase_email()
       |> RegisterUser.hash_password()
 
     with :ok <- Router.dispatch(register_user, application: ConduitApp, consistency: :strong) do
-      get(User, uuid)
+      get(User, id)
     else
       reply -> reply
     end
@@ -52,14 +52,14 @@ defmodule Conduit.Accounts do
   end
 
   @doc """
-  Get a single user by their UUID
+  Get a single user by their ID
   """
-  def user_by_uuid(uuid) when is_binary(uuid) do
-    Repo.get(User, uuid)
+  def user_by_id(id) when is_binary(id) do
+    Repo.get(User, id)
   end
 
-  defp get(schema, uuid) do
-    case Repo.get(schema, uuid) do
+  defp get(schema, id) do
+    case Repo.get(schema, id) do
       nil -> {:error, :not_found}
       projection -> {:ok, projection}
     end

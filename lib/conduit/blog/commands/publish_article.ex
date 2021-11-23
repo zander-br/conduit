@@ -1,6 +1,6 @@
 defmodule Conduit.Blog.Commands.PublishArticle do
-  defstruct article_uuid: "",
-            author_uuid: "",
+  defstruct article_id: "",
+            author_id: "",
             slug: "",
             title: "",
             description: "",
@@ -14,9 +14,9 @@ defmodule Conduit.Blog.Commands.PublishArticle do
   alias Conduit.Blog.Projections.Author
   alias Conduit.Blog.Slugger
 
-  validates(:article_uuid, uuid: true)
+  validates(:article_id, uuid: true)
 
-  validates(:author_uuid, uuid: true)
+  validates(:author_id, uuid: true)
 
   validates(:slug,
     presence: [message: "can't be empty"],
@@ -36,15 +36,15 @@ defmodule Conduit.Blog.Commands.PublishArticle do
   @doc """
   Assign a unique identity
   """
-  def assign_uuid(%PublishArticle{} = publish_article, uuid) do
-    %PublishArticle{publish_article | article_uuid: uuid}
+  def assign_id(%PublishArticle{} = publish_article, id) do
+    %PublishArticle{publish_article | article_id: id}
   end
 
   @doc """
   Assign the author
   """
-  def assign_author(%PublishArticle{} = publish_article, %Author{id: uuid}) do
-    %PublishArticle{publish_article | author_uuid: uuid}
+  def assign_author(%PublishArticle{} = publish_article, %Author{id: id}) do
+    %PublishArticle{publish_article | author_id: id}
   end
 
   @doc """

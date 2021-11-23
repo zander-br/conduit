@@ -14,7 +14,7 @@ defmodule Conduit.Blog.AuthorTest do
       assert {:ok, %User{} = user} = Accounts.register_user(build(:user))
 
       assert_receive_event(ConduitApp, AuthorCreated, fn event ->
-        assert event.user_uuid == user.id
+        assert event.user_id == user.id
         assert event.username == user.username
       end)
     end

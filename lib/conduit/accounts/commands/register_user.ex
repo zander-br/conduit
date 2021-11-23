@@ -1,5 +1,5 @@
 defmodule Conduit.Accounts.Commands.RegisterUser do
-  defstruct [:user_uuid, :username, :email, :password, :hashed_password]
+  defstruct [:user_id, :username, :email, :password, :hashed_password]
 
   use ExConstructor
   use Vex.Struct
@@ -7,7 +7,7 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
   alias Conduit.Accounts.Commands.RegisterUser
   alias Conduit.Auth
 
-  validates(:user_uuid, uuid: true)
+  validates(:user_id, uuid: true)
 
   validates(:username,
     presence: [message: "can't be empty"],
@@ -28,8 +28,8 @@ defmodule Conduit.Accounts.Commands.RegisterUser do
   @doc """
   Assign a unique identity for the user
   """
-  def assign_uuid(%RegisterUser{} = register_user, uuid) do
-    %RegisterUser{register_user | user_uuid: uuid}
+  def assign_id(%RegisterUser{} = register_user, id) do
+    %RegisterUser{register_user | user_id: id}
   end
 
   @doc """

@@ -12,8 +12,8 @@ defmodule Conduit.Blog.Projectors.Article do
 
   project(%AuthorCreated{} = author, fn multi ->
     Multi.insert(multi, :author, %Author{
-      id: author.author_uuid,
-      user_id: author.user_uuid,
+      id: author.author_id,
+      user_id: author.user_id,
       username: author.username,
       bio: nil,
       image: nil
@@ -22,10 +22,10 @@ defmodule Conduit.Blog.Projectors.Article do
 
   project(%ArticlePublished{} = published, %{created_at: published_at}, fn multi ->
     multi
-    |> Ecto.Multi.run(:author, fn _repo, _changes -> get_author(published.author_uuid) end)
+    |> Ecto.Multi.run(:author, fn _repo, _changes -> get_author(published.author_id) end)
     |> Ecto.Multi.run(:article, fn _repo, %{author: author} ->
       article = %Article{
-        id: published.article_uuid,
+        id: published.article_id,
         slug: published.slug,
         title: published.title,
         description: published.description,
@@ -43,8 +43,8 @@ defmodule Conduit.Blog.Projectors.Article do
     end)
   end)
 
-  defp get_author(uuid) do
-    case Repo.get(Author, uuid) do
+  defp get_author(id) do
+    case Repo.get(Author, id) do
       nil -> {:error, :author_not_found}
       author -> {:ok, author}
     end

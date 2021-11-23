@@ -7,8 +7,8 @@ defmodule Conduit.Blog.Workflows.CreateAuthorFromUser do
   alias Conduit.Accounts.Events.UserRegistered
   alias Conduit.Blog
 
-  def handle(%UserRegistered{user_uuid: user_uuid, username: username}, _metadata) do
-    with {:ok, _author} <- Blog.create_author(%{user_uuid: user_uuid, username: username}) do
+  def handle(%UserRegistered{user_id: user_id, username: username}, _metadata) do
+    with {:ok, _author} <- Blog.create_author(%{user_id: user_id, username: username}) do
       :ok
     else
       reply -> reply

@@ -15,7 +15,7 @@ defmodule Conduit.Auth.Guardian do
     user =
       claims
       |> Map.get("sub")
-      |> Accounts.user_by_uuid()
+      |> Accounts.user_by_id()
 
     {:ok, user}
   end

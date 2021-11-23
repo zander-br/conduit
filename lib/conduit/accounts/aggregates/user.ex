@@ -1,5 +1,5 @@
 defmodule Conduit.Accounts.Aggregates.User do
-  defstruct [:uuid, :username, :email, :hashed_password]
+  defstruct [:id, :username, :email, :hashed_password]
 
   alias Conduit.Accounts.Aggregates.User
   alias Conduit.Accounts.Commands.RegisterUser
@@ -9,9 +9,9 @@ defmodule Conduit.Accounts.Aggregates.User do
     Register a new user
   """
 
-  def execute(%User{uuid: nil}, %RegisterUser{} = register) do
+  def execute(%User{id: nil}, %RegisterUser{} = register) do
     %UserRegistered{
-      user_uuid: register.user_uuid,
+      user_id: register.user_id,
       username: register.username,
       email: register.email,
       hashed_password: register.hashed_password
@@ -21,7 +21,7 @@ defmodule Conduit.Accounts.Aggregates.User do
   def apply(%User{} = user, %UserRegistered{} = registered) do
     %User{
       user
-      | uuid: registered.user_uuid,
+      | id: registered.user_id,
         username: registered.username,
         email: registered.email,
         hashed_password: registered.hashed_password

@@ -22,13 +22,13 @@ defmodule Conduit.Factory do
       description: "Ever wonder how?",
       body: "You have to believe",
       tag_list: ["dragons", "training"],
-      author_uuid: UUID.uuid4()
+      author_id: UUID.uuid4()
     }
   end
 
   def author_factory do
     %{
-      user_uuid: UUID.uuid4(),
+      user_id: UUID.uuid4(),
       username: "jake",
       bio: "I like to skateboard",
       image: "https://i.stack.imgur.com/xHWG8.jpg"

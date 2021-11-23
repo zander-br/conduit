@@ -1,4 +1,4 @@
 defmodule Conduit.Blog.Events.ArticlePublished do
   @derive Jason.Encoder
-  defstruct [:article_uuid, :author_uuid, :slug, :title, :description, :body, :tag_list]
+  defstruct [:article_id, :author_id, :slug, :title, :description, :body, :tag_list]
 end

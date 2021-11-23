@@ -11,7 +11,7 @@ defmodule Conduit.Accounts.Projectors.User do
 
   project(%UserRegistered{} = registered, fn multi ->
     Multi.insert(multi, :user, %User{
-      id: registered.user_uuid,
+      id: registered.user_id,
       username: registered.username,
       email: registered.email,
       hashed_password: registered.hashed_password,

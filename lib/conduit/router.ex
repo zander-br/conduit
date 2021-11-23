@@ -10,9 +10,9 @@ defmodule Conduit.Router do
   middleware(Validate)
   middleware(Uniqueness)
 
-  identify(Article, by: :article_uuid, prefix: "article-")
-  identify(Author, by: :author_uuid, prefix: "author-")
-  identify(User, by: :user_uuid, prefix: "user-")
+  identify(Article, by: :article_id, prefix: "article-")
+  identify(Author, by: :author_id, prefix: "author-")
+  identify(User, by: :user_id, prefix: "user-")
 
   dispatch([CreateAuthor], to: Author)
   dispatch([PublishArticle], to: Article)

@@ -1,5 +1,5 @@
 defmodule Conduit.Blog.Aggregates.Author do
-  defstruct [:uuid, :user_uuid, :username, :bio, :image]
+  defstruct [:id, :user_id, :username, :bio, :image]
 
   alias Conduit.Blog.Aggregates.Author
   alias Conduit.Blog.Commands.CreateAuthor
@@ -8,10 +8,10 @@ defmodule Conduit.Blog.Aggregates.Author do
   @doc """
   Creates an author
   """
-  def execute(%Author{uuid: nil}, %CreateAuthor{} = create) do
+  def execute(%Author{id: nil}, %CreateAuthor{} = create) do
     %AuthorCreated{
-      author_uuid: create.author_uuid,
-      user_uuid: create.user_uuid,
+      author_id: create.author_id,
+      user_id: create.user_id,
       username: create.username
     }
   end
@@ -19,8 +19,8 @@ defmodule Conduit.Blog.Aggregates.Author do
   def apply(%Author{} = author, %AuthorCreated{} = created) do
     %Author{
       author
-      | uuid: created.author_uuid,
-        user_uuid: created.user_uuid,
+      | id: created.author_id,
+        user_id: created.user_id,
         username: created.username
     }
   end
