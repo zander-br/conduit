@@ -41,5 +41,10 @@ defmodule Conduit.BlogTest do
     test "should list articles by published date", %{articles: [article1, article2]} do
       assert {[article2, article1], 2} == Blog.list_articles()
     end
+
+    @tag :integration
+    test "should limit articles", %{articles: [_article1, article2]} do
+      assert {[article2], 2} == Blog.list_articles(%{limit: 1})
+    end
   end
 end
