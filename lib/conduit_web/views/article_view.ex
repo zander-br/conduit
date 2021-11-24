@@ -4,8 +4,11 @@ defmodule ConduitWeb.ArticleView do
   alias Conduit.Blog.Projections.Article
   alias ConduitWeb.ArticleView
 
-  def render("index.json", %{articles: articles}) do
-    %{articles: render_many(articles, ArticleView, "article.json")}
+  def render("index.json", %{articles: articles, total_count: total_count}) do
+    %{
+      articles: render_many(articles, ArticleView, "article.json"),
+      articlesCount: total_count
+    }
   end
 
   def render("show.json", %{article: article}) do

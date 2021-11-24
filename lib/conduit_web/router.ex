@@ -13,11 +13,14 @@ defmodule ConduitWeb.Router do
     pipe_through [:api, :auth]
 
     get "/user", UserController, :current
+
     post "/articles", ArticleController, :create
   end
 
   scope "/api", ConduitWeb do
     pipe_through :api
+
+    get "/articles", ArticleController, :index
 
     post "/users/login", SessionController, :create
     post "/users", UserController, :create

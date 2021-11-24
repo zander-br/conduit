@@ -16,6 +16,20 @@ defmodule Conduit.Fixture do
     [author: author]
   end
 
+  def publish_articles(%{author: author}) do
+    {:ok, article1} = fixture(:article, author: author)
+
+    {:ok, article2} =
+      fixture(:article,
+        author: author,
+        title: "How to train your dragon 2",
+        description: "So toothless",
+        body: "It a dragon"
+      )
+
+    [articles: [article1, article2]]
+  end
+
   def fixture(resource, attrs \\ [])
 
   def fixture(:author, attrs) do
@@ -24,5 +38,11 @@ defmodule Conduit.Fixture do
 
   def fixture(:user, attrs) do
     build(:user, attrs) |> Accounts.register_user()
+  end
+
+  def fixture(:article, attrs) do
+    {author, attrs} = Keyword.pop(attrs, :author)
+
+    Blog.publish_article(author, build(:article, attrs))
   end
 end

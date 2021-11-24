@@ -17,4 +17,9 @@ defmodule ConduitWeb.ArticleController do
       |> render("show.json", article: article)
     end
   end
+
+  def index(conn, params) do
+    {articles, total_count} = Blog.list_articles(params)
+    render(conn, "index.json", articles: articles, total_count: total_count)
+  end
 end
