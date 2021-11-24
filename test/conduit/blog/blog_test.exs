@@ -30,4 +30,16 @@ defmodule Conduit.BlogTest do
       assert article2.slug == "how-to-train-your-dragon-2"
     end
   end
+
+  describe "list articles" do
+    setup [
+      :create_author,
+      :publish_articles
+    ]
+
+    @tag :integration
+    test "should list articles by published date", %{articles: [article1, article2]} do
+      assert {[article2, article1], 2} == Blog.list_articles()
+    end
+  end
 end
