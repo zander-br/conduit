@@ -17,7 +17,8 @@ defmodule Conduit.Fixture do
   end
 
   def publish_articles(%{author: author}) do
-    {:ok, article1} = fixture(:article, author: author)
+    {:ok, article1} =
+      fixture(:article, author: author, tag_list: ["dragons", "training", "believe"])
 
     {:ok, article2} =
       fixture(:article,

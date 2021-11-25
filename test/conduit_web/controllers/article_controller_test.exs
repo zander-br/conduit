@@ -80,7 +80,7 @@ defmodule ConduitWeb.ArticleControllerTest do
                    "title" => "How to train your dragon",
                    "description" => "Ever wonder how?",
                    "body" => "You have to believe",
-                   "tagList" => ["dragons", "training"],
+                   "tagList" => ["dragons", "training", "believe"],
                    "createdAt" => second_created_at,
                    "updatedAt" => second_updated_at,
                    "favorited" => false,
