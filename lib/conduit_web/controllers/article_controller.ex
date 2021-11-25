@@ -7,6 +7,16 @@ defmodule ConduitWeb.ArticleController do
 
   action_fallback ConduitWeb.FallbackController
 
+  def index(conn, params) do
+    {articles, total_count} = Blog.list_articles(params)
+    render(conn, "index.json", articles: articles, total_count: total_count)
+  end
+
+  def show(conn, %{"slug" => slug}) do
+    article = Blog.article_by_slug!(slug)
+    render(conn, "show.json", article: article)
+  end
+
   def create(conn, %{"article" => article_params}) do
     user = Plug.current_resource(conn)
     author = Blog.get_author!(user.id)
@@ -16,10 +26,5 @@ defmodule ConduitWeb.ArticleController do
       |> put_status(:created)
       |> render("show.json", article: article)
     end
-  end
-
-  def index(conn, params) do
-    {articles, total_count} = Blog.list_articles(params)
-    render(conn, "index.json", articles: articles, total_count: total_count)
   end
 end

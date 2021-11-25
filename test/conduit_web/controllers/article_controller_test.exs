@@ -97,4 +97,40 @@ defmodule ConduitWeb.ArticleControllerTest do
              }
     end
   end
+
+  describe "get article" do
+    setup [
+      :create_author,
+      :publish_article
+    ]
+
+    @tag :web
+    test "should return published article by slug", %{conn: conn} do
+      conn = get(conn, Routes.article_path(conn, :show, "how-to-train-your-dragon"))
+      json = json_response(conn, 200)
+      article = json["article"]
+      created_at = article["createdAt"]
+      updated_at = article["updatedAt"]
+
+      assert json == %{
+               "article" => %{
+                 "slug" => "how-to-train-your-dragon",
+                 "title" => "How to train your dragon",
+                 "description" => "Ever wonder how?",
+                 "body" => "You have to believe",
+                 "tagList" => ["dragons", "training"],
+                 "createdAt" => created_at,
+                 "updatedAt" => updated_at,
+                 "favorited" => false,
+                 "favoritesCount" => 0,
+                 "author" => %{
+                   "username" => "jake",
+                   "bio" => nil,
+                   "image" => nil,
+                   "following" => false
+                 }
+               }
+             }
+    end
+  end
 end
