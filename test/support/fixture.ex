@@ -37,6 +37,24 @@ defmodule Conduit.Fixture do
     [articles: [article1, article2]]
   end
 
+  def get_author(%{user: user}) do
+    author = Blog.get_author!(user.id)
+
+    [author: author]
+  end
+
+  def favorite_article(%{articles: [article | articles], author: author}) do
+    {:ok, article} = Blog.favorite_article(article, author)
+
+    [articles: [article | articles]]
+  end
+
+  def favorite_article(%{article: article, author: author}) do
+    {:ok, article} = Blog.favorite_article(article, author)
+
+    [article: article]
+  end
+
   def fixture(resource, attrs \\ [])
 
   def fixture(:author, attrs) do

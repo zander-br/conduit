@@ -3,6 +3,7 @@ defmodule Conduit.Factory do
 
   alias Conduit.Accounts.Commands.RegisterUser
   alias Conduit.Blog.Commands.PublishArticle
+  alias Conduit.Blog.Events.ArticlePublished
 
   def user_factory do
     %{
@@ -41,5 +42,9 @@ defmodule Conduit.Factory do
 
   def publish_article_factory do
     struct(PublishArticle, build(:article))
+  end
+
+  def article_published_factory do
+    struct(ArticlePublished, build(:article))
   end
 end

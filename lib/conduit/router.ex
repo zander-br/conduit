@@ -4,7 +4,7 @@ defmodule Conduit.Router do
   alias Conduit.Accounts.Aggregates.User
   alias Conduit.Accounts.Commands.RegisterUser
   alias Conduit.Blog.Aggregates.{Article, Author}
-  alias Conduit.Blog.Commands.{CreateAuthor, PublishArticle}
+  alias Conduit.Blog.Commands.{CreateAuthor, FavoriteArticle, PublishArticle, UnfavoriteArticle}
   alias Conduit.Support.Middleware.{Uniqueness, Validate}
 
   middleware(Validate)
@@ -15,6 +15,6 @@ defmodule Conduit.Router do
   identify(User, by: :user_id, prefix: "user-")
 
   dispatch([CreateAuthor], to: Author)
-  dispatch([PublishArticle], to: Article)
+  dispatch([PublishArticle, FavoriteArticle, UnfavoriteArticle], to: Article)
   dispatch([RegisterUser], to: User)
 end

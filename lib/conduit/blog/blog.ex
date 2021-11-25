@@ -6,7 +6,7 @@ defmodule Conduit.Blog do
   import Ecto.Query, warn: false
 
   alias Conduit.App, as: ConduitApp
-  alias Conduit.Blog.Commands.{CreateAuthor, PublishArticle}
+  alias Conduit.Blog.Commands.{CreateAuthor, FavoriteArticle, PublishArticle, UnfavoriteArticle}
   alias Conduit.Blog.Projections.{Article, Author}
   alias Conduit.Blog.Queries.{ArticleBySlug, ListArticles}
   alias Conduit.{Repo, Router}
@@ -72,6 +72,41 @@ defmodule Conduit.Blog do
           {articles :: list(Article.t()), article_count :: non_neg_integer()}
   def list_articles(params \\ %{}) do
     ListArticles.paginate(params, Repo)
+  end
+
+  @doc """
+  Favorite the article for an author
+  """
+  def favorite_article(%Article{id: article_id}, %Author{id: author_id}) do
+    favorite_article = %FavoriteArticle{
+      article_id: article_id,
+      favorited_by_author_id: author_id
+    }
+
+    with :ok <- Router.dispatch(favorite_article, application: ConduitApp, consistency: :strong),
+         {:ok, article} <- get(Article, article_id) do
+      {:ok, %Article{article | favorited: true}}
+    else
+      reply -> reply
+    end
+  end
+
+  @doc """
+  Unfavorite the article for an author
+  """
+  def unfavorite_article(%Article{id: article_id}, %Author{id: author_id}) do
+    unfavorite_article = %UnfavoriteArticle{
+      article_id: article_id,
+      unfavorited_by_author_id: author_id
+    }
+
+    with :ok <-
+           Router.dispatch(unfavorite_article, application: ConduitApp, consistency: :strong),
+         {:ok, article} <- get(Article, article_id) do
+      {:ok, %Article{article | favorited: false}}
+    else
+      reply -> reply
+    end
   end
 
   defp get(schema, id) do
