@@ -5,6 +5,7 @@ defmodule Conduit.Blog do
 
   import Ecto.Query, warn: false
 
+  alias Conduit.Accounts.Projections.User
   alias Conduit.App, as: ConduitApp
   alias Conduit.Blog.Commands.{CreateAuthor, FavoriteArticle, PublishArticle, UnfavoriteArticle}
   alias Conduit.Blog.Projections.{Article, Author}
@@ -15,6 +16,14 @@ defmodule Conduit.Blog do
   Get the author for a given id, or raise an `Ecto.NoResultsError` if not found.
   """
   def get_author!(id), do: Repo.get!(Author, id)
+
+  @doc """
+  Get the author for a given id, or nil if the user is nil
+  """
+  def get_author(user)
+  def get_author(nil), do: nil
+  def get_author(%User{id: user_id}), do: get_author(user_id)
+  def get_author(id) when is_bitstring(id), do: Repo.get(Author, id)
 
   @doc """
   Get an article by its URL slug, or return `nil` if not found.
@@ -68,10 +77,12 @@ defmodule Conduit.Blog do
 
   Provide tag, author or favorited query parameter to filter results.
   """
-  @spec list_articles(params :: map()) ::
+  @spec list_articles(params :: map(), author :: Author.t()) ::
           {articles :: list(Article.t()), article_count :: non_neg_integer()}
-  def list_articles(params \\ %{}) do
-    ListArticles.paginate(params, Repo)
+  def list_articles(params \\ %{}, author \\ nil)
+
+  def list_articles(params, author) do
+    ListArticles.paginate(params, author, Repo)
   end
 
   @doc """

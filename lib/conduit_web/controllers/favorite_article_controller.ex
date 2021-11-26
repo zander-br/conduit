@@ -6,6 +6,8 @@ defmodule ConduitWeb.FavoriteArticleController do
   alias ConduitWeb.ArticleView
   alias Guardian.Plug
 
+  plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete]
+
   action_fallback ConduitWeb.FallbackController
 
   def create(%{assigns: %{article: article}} = conn, _params) do

@@ -5,10 +5,15 @@ defmodule ConduitWeb.ArticleController do
   alias Conduit.Blog.Projections.Article
   alias Guardian.Plug
 
+  plug Guardian.Plug.EnsureAuthenticated when action in [:create]
+
   action_fallback ConduitWeb.FallbackController
 
   def index(conn, params) do
-    {articles, total_count} = Blog.list_articles(params)
+    user = Plug.current_resource(conn)
+    author = Blog.get_author(user)
+
+    {articles, total_count} = Blog.list_articles(params, author)
     render(conn, "index.json", articles: articles, total_count: total_count)
   end
 

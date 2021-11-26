@@ -5,9 +5,7 @@ defmodule ConduitWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-  end
 
-  pipeline :auth do
     plug Auth.Pipeline
   end
 
@@ -16,10 +14,10 @@ defmodule ConduitWeb.Router do
   end
 
   scope "/api", ConduitWeb do
-    pipe_through [:api, :auth]
+    pipe_through :api
 
-    get "/user", UserController, :current
-
+    get "/articles", ArticleController, :index
+    get "/articles/:slug", ArticleController, :show
     post "/articles", ArticleController, :create
 
     scope "/articles/:slug" do
@@ -28,14 +26,8 @@ defmodule ConduitWeb.Router do
       post "/favorite", FavoriteArticleController, :create
       delete "/favorite", FavoriteArticleController, :delete
     end
-  end
 
-  scope "/api", ConduitWeb do
-    pipe_through :api
-
-    get "/articles", ArticleController, :index
-    get "/articles/:slug", ArticleController, :show
-
+    get "/user", UserController, :current
     post "/users/login", SessionController, :create
     post "/users", UserController, :create
   end

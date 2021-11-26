@@ -5,6 +5,8 @@ defmodule ConduitWeb.UserController do
   alias Conduit.Accounts.Projections.User
   alias Guardian.Plug
 
+  plug Guardian.Plug.EnsureAuthenticated when action in [:current]
+
   action_fallback ConduitWeb.FallbackController
 
   def create(conn, %{"user" => user_params}) do
