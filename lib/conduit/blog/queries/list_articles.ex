@@ -4,7 +4,7 @@ defmodule Conduit.Blog.Queries.ListArticles do
   alias Conduit.Blog.Projections.{Article, Author, FavoritedArticle}
 
   defmodule Options do
-    defstruct limit: 20, offset: 0, author: nil, tag: nil
+    defstruct limit: 20, offset: 0, author: nil, tag: nil, favorited: nil
 
     use ExConstructor
   end
@@ -23,6 +23,7 @@ defmodule Conduit.Blog.Queries.ListArticles do
     from(a in Article)
     |> filter_by_author(options)
     |> filter_by_tag(options)
+    |> filter_by_favorited_by_user(options)
   end
 
   defp filter_by_author(query, %Options{author: nil}), do: query
@@ -36,6 +37,14 @@ defmodule Conduit.Blog.Queries.ListArticles do
   defp filter_by_tag(query, %Options{tag: tag}) do
     from a in query,
       where: fragment("? @> ?", a.tag_list, [^tag])
+  end
+
+  defp filter_by_favorited_by_user(query, %Options{favorited: nil}), do: query
+
+  defp filter_by_favorited_by_user(query, %Options{favorited: favorited}) do
+    from a in query,
+      join: f in FavoritedArticle,
+      on: [article_id: a.id, favorited_by_username: ^favorited]
   end
 
   defp entries(query, %Options{limit: limit, offset: offset}, author) do

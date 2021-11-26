@@ -57,10 +57,16 @@ defmodule Conduit.Blog.Projectors.Article do
     },
     fn multi ->
       multi
-      |> Multi.insert(:favorited_article, %FavoritedArticle{
-        article_id: article_id,
-        favorited_by_author_id: favorited_by_author_id
-      })
+      |> Multi.run(:author, fn _repo, _changes -> get_author(favorited_by_author_id) end)
+      |> Multi.run(:favorited_article, fn _repo, %{author: author} ->
+        favorite = %FavoritedArticle{
+          article_id: article_id,
+          favorited_by_author_id: favorited_by_author_id,
+          favorited_by_username: author.username
+        }
+
+        Repo.insert(favorite)
+      end)
       |> Multi.update_all(:article, article_query(article_id),
         set: [favorite_count: favorite_count]
       )
