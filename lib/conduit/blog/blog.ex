@@ -9,7 +9,7 @@ defmodule Conduit.Blog do
   alias Conduit.App, as: ConduitApp
   alias Conduit.Blog.Commands.{CreateAuthor, FavoriteArticle, PublishArticle, UnfavoriteArticle}
   alias Conduit.Blog.Projections.{Article, Author}
-  alias Conduit.Blog.Queries.{ArticleBySlug, ListArticles}
+  alias Conduit.Blog.Queries.{ArticleBySlug, ListArticles, ListTags}
   alias Conduit.{Repo, Router}
 
   @doc """
@@ -119,6 +119,11 @@ defmodule Conduit.Blog do
       reply -> reply
     end
   end
+
+  @doc """
+  List all tags
+  """
+  def list_tags, do: ListTags.new() |> Repo.all() |> Enum.map(& &1.name)
 
   defp get(schema, id) do
     case Repo.get(schema, id) do
